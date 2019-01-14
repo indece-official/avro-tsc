@@ -1,0 +1,32 @@
+{
+  "name": "avro-tsc",
+  "version": "1.0.0-alpha.0",
+  "description": "Advanced generator for generating Typescript type-definitions from AVRO-schema files",
+  "main": "index.js",
+  "bin": {
+    "avro-tsc": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/indece-official/avro-tsc.git"
+  },
+  "keywords": [
+    "avro",
+    "typescript",
+    "generator",
+    "schema",
+    "registry"
+  ],
+  "author": "indece UG <info@indece.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/indece-official/avro-tsc/issues"
+  },
+  "homepage": "https://github.com/indece-official/avro-tsc#readme",
+  "dependencies": {
+    "del": "^3.0.0"
+  }
+}
