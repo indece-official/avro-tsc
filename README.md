@@ -5,7 +5,7 @@ This is a alpha-version - please see section [Status](#status) for overview of c
 `> npm install avro-tsc -g`
 
 ## Usage
-`> avro-tsc ./schemas`
+`> avro-tsc ./schemas ./dist/types/`
 
 Format:
 `> avro-tsc $INPUT_DIR $OUTPUT_DIR`
