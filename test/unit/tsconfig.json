@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "typeRoots": [
+      "../../lib/types",
+      "../../node_modules/@types"
+    ]
+  },
+  "ts-node": {
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "typeRoots": [
+      "lib/types",
+      "node_modules/@types"
+    ]
+  },
+  "include": [
+      "./",
+      "../../lib"
+  ],
+  "exclude": [
+      "../../node_modules"
+  ],
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}

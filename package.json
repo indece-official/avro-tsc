@@ -1,13 +1,15 @@
 {
   "name": "avro-tsc",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "Advanced generator for generating Typescript type-definitions from AVRO-schema files",
   "main": "index.js",
   "bin": {
-    "avro-tsc": "./index.js"
+    "avro-tsc": "./dist/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodejs dist/index.js",
+    "build": "tsc",
+    "unit-test": "nodejs bin/unit-test.js"
   },
   "repository": {
     "type": "git",
@@ -27,11 +29,15 @@
   },
   "homepage": "https://github.com/indece-official/avro-tsc#readme",
   "dependencies": {
+    "debug": "^4.1.1",
     "del": "^3.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
+    "@types/debug": "0.0.31",
+    "@types/del": "^3.0.1",
     "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.18",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "ts-node": "^7.0.1",

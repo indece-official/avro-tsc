@@ -1,0 +1,19 @@
+{
+    "type":         "record",
+    "namespace":    "nspace",
+    "name":         "TestType3",
+    "fields":       [
+        {
+            "name":     "TestString1",
+            "type":     "string"
+        },
+        {
+            "name":     "TestString2",
+            "type":     "string"
+        },
+        {
+            "name":     "TestNumber",
+            "type":     "int"
+        }
+    ]
+}
