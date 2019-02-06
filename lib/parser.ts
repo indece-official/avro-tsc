@@ -114,9 +114,18 @@ export class Parser
             {
                 if ( typeof(type) === 'object' )
                 {
-                    let sub_field   = this._processType(avro.type, nspace, root_elements, path + '/' + avro.name, false).field;
+                    let sub_field   = this._processType(type, nspace, root_elements, path + '/' + avro.name, type.name && true).field;
 
-                    field.types = field.types.concat(sub_field.types);
+                    if ( sub_field.name )
+                    {
+                        field.types = field.types.concat([{
+                            type:       sub_field.name
+                        }]);
+                    }
+                    else
+                    {
+                        field.types = field.types.concat(sub_field.types);
+                    }
                 }
                 else
                 {

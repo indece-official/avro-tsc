@@ -1,10 +1,10 @@
 {
   "name": "avro-tsc",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.5",
   "description": "Advanced generator for generating Typescript type-definitions from AVRO-schema files",
-  "main": "index.js",
+  "main": "dist/index.js",
   "bin": {
-    "avro-tsc": "./dist/index.js"
+    "avro-tsc": "bin/avro-tsc"
   },
   "scripts": {
     "start": "nodejs dist/index.js",
@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/indece-official/avro-tsc#readme",
   "dependencies": {
+    "commander": "^2.19.0",
     "debug": "^4.1.1",
     "del": "^3.0.0"
   },

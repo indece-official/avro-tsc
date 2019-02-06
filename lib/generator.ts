@@ -1,10 +1,14 @@
 import * as FS from 'fs';
 import * as Path from 'path';
 import * as Del from 'del';
+import * as Debug from 'debug';
 import { promisify } from 'util';
 import { RootElement, ElementType, Element } from './element';
 import { Options, ExportMode, DEFAULT_OPTIONS } from './options';
 
+const logError      = Debug('avro-tsc.generator:error');
+const logInfo       = Debug('avro-tsc.generator:info');
+const logDebug      = Debug('avro-tsc.generator:debug');
 const FSwriteFile   = promisify(FS.writeFile);
 const FSmkdir       = promisify(FS.mkdir);
 const FSexists      = promisify(FS.exists);
@@ -259,6 +263,8 @@ export class Generator
             await Del(this.options.output_dir, {force: true});
         }
 
+        logInfo(`Writing output to directory '${this.options.output_dir}' ...`);
+
         await FSmkdir(this.options.output_dir);
 
         if ( this.options.single_file )
@@ -269,6 +275,8 @@ export class Generator
         for ( let file of files )
         {
             let path = Path.resolve(this.options.output_dir, file.filename);
+
+            logInfo(`Writing to file '${path}' ...`);
 
             await FSwriteFile(path, file.content);
         }

@@ -1,4 +1,5 @@
 import * as Commander from 'commander';
+import * as Debug from 'debug';
 import { Parser } from './lib/parser';
 import { Generator } from './lib/generator';
 import { Options, DEFAULT_OPTIONS } from './lib/options';
@@ -6,6 +7,11 @@ import { Options, DEFAULT_OPTIONS } from './lib/options';
 export * from './lib/options';
 export * from './lib/generator';
 export * from './lib/element';
+
+
+const logError      = Debug('avro-tsc.index:error');
+const logInfo       = Debug('avro-tsc.index:info');
+const logDebug      = Debug('avro-tsc.index:debug');
 
 
 export async function main ( ): Promise<number>
@@ -39,12 +45,22 @@ export async function main ( ): Promise<number>
         output_dir:         Commander.args[1]
     };
 
+    if ( ! options.quiet )
+    {
+        Debug.enable('avro-tsc.*:info,avro-tsc.*:error');
+
+        /* Clean output for endusers (no special tags, colors, timestamps etc.) */
+        (<any> Debug).formatArgs = ( ...args: any[] ) => args[0];
+    }
+
     let parser      = new Parser(options);
     let generator   = new Generator(options);
 
     let elements    = await parser.load();
 
     await generator.dump(elements);
+
+    logInfo('done');
 
     return 0;
 }

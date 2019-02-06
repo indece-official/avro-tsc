@@ -263,7 +263,68 @@ describe('Parser', ( ) =>
 
         it('Nested unions');
 
-        it('Nested records');
+        it('Nested records', ( ) =>
+        {
+            let avro        = {
+                "type":         "record",
+                "namespace":    "nspace",
+                "name":         "TestType",
+                "fields":       [
+                    {
+                        "name":     "PropTestSubType1",
+                        "type":     [
+                            "null",
+                            {
+                                "name":         "TestSubType1",
+                                "type":         "record",
+                                "fields":       [
+                                    {
+                                        "name":     "PropTestSubType2",
+                                        "type":     {
+                                            "name":         "TestSubType2",
+                                            "type":         "record",
+                                            "fields":       [
+                                                {
+                                                    "name":     "PropTestNumber",
+                                                    "type":     "long"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            };
+
+
+            let elements    = parser.parse(avro);
+
+            //console.log(elements.map( o => `${o.namespace}.${o.name}: ${o.types.map( t => t.type).join(' | ')}`));
+
+            expect(elements.length).to.equal(3);
+
+            let element: any    = null;
+
+            element     = elements.find( o => o.name == 'TestType');
+            expect(element.namespace).to.equal('nspace');
+            expect(element.types).to.deep.equal([{type: ElementType.RECORD}]);
+            expect(element.children[0].name).to.equal('PropTestSubType1');
+            expect(element.children[0].types).to.deep.equal([{type: ElementType.NULL}, {type: 'TestSubType1'}]);
+
+            element     = elements.find( o => o.name == 'TestSubType1');
+            expect(element.namespace).to.equal('nspace');
+            expect(element.types).to.deep.equal([{type: ElementType.RECORD}]);
+            expect(element.children[0].name).to.equal('PropTestSubType2');
+            expect(element.children[0].types).to.deep.equal([{type: 'TestSubType2'}]);
+
+            element     = elements.find( o => o.name == 'TestSubType2');
+            expect(element.namespace).to.equal('nspace');
+            expect(element.types).to.deep.equal([{type: ElementType.RECORD}]);
+            expect(element.children[0].name).to.equal('PropTestNumber');
+            expect(element.children[0].types).to.deep.equal([{type: ElementType.NUMBER}]);
+        });
     });
 
 
