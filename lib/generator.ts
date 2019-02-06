@@ -265,7 +265,7 @@ export class Generator
 
         logInfo(`Writing output to directory '${this.options.output_dir}' ...`);
 
-        await FSmkdir(this.options.output_dir);
+        await FSmkdir(this.options.output_dir, {recursive: true});
 
         if ( this.options.single_file )
         {

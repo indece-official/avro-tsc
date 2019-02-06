@@ -1,6 +1,6 @@
 {
   "name": "avro-tsc",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "description": "Advanced generator for generating Typescript type-definitions from AVRO-schema files",
   "main": "dist/index.js",
   "bin": {
