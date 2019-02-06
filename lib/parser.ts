@@ -83,23 +83,21 @@ export class Parser
                            nspace?:         string,
                            root_elements?:  Array<RootElement>,
                            path?:           string,
-                           is_root?:        boolean ): { root_elements: Array<RootElement>, field: SubField }
+                           can_be_root?:        boolean ): { root_elements: Array<RootElement>, field: SubField }
     {
         let field: SubField;
-
-        let registered          = '';
 
         nspace          = avro.namespace || nspace || '';
         root_elements   = root_elements || [];
         path            = path || '';
 
-        if ( typeof(is_root) === 'undefined' )
+        if ( typeof(can_be_root) === 'undefined' )
         {
-            is_root = true;
+            can_be_root = true;
         }
 
         //console.log(avro, avro.type);
-        //console.log(`${nspace + '/' + avro.name} - is_root: ${is_root}`);
+        //console.log(`${nspace + '/' + avro.name} - can_be_root: ${can_be_root}`);
 
         field       = {
             name:       avro.name,
@@ -114,7 +112,7 @@ export class Parser
             {
                 if ( typeof(type) === 'object' )
                 {
-                    let sub_field   = this._processType(type, nspace, root_elements, path + '/' + avro.name, type.name && true).field;
+                    let sub_field   = this._processType(type, nspace, root_elements, path + '/' + avro.name, true).field;
 
                     if ( sub_field.name )
                     {
@@ -141,7 +139,7 @@ export class Parser
              *
              * Important: is not always an new RootElement, only if it has a name assigned
              */
-            let sub_field   = this._processType(avro.type, nspace, root_elements, path + '/' + avro.name, avro.type.name && true).field;
+            let sub_field   = this._processType(avro.type, nspace, root_elements, path + '/' + avro.name, true).field;
 
             if ( sub_field.name )
             {
@@ -156,27 +154,45 @@ export class Parser
         }
         else if ( avro.type == 'array' )
         {
-            field.types = [{
-                type:       ElementType.ARRAY,
-                subtypes:   [
-                    {
-                        type:   this._processType(avro.items, nspace, root_elements, path + '/' + avro.name, true).field.name
-                    }
-                ]
-            }];
+            field.types = [
+                {
+                    type:       ElementType.ARRAY,
+                    subtypes:   []
+                }
+            ];
+
+            if ( typeof(avro.items) === 'object' )
+            {
+                let sub_field   = this._processType(avro.items, nspace, root_elements, path + '/' + avro.name, true).field;
+
+                if ( sub_field.name )
+                {
+                    field.types[0].subtypes = [
+                        {
+                            type:   sub_field.name
+                        }
+                    ];
+                }
+                else
+                {
+                    field.types[0].subtypes = sub_field.types;
+                }
+            }
+            else
+            {
+                field.types[0].subtypes = this._parseAvroType(avro.items);
+            }
         }
         else
         {
             field.types = this._parseAvroType(avro.type);
         }
 
-        //console.log((is_root ? '[ROOT] ' : '       ') + field.name + ': ' + field.types.map( o => o.type).join(' | '));
+        //console.log(((can_be_root && avro.name) ? '[ROOT] ' : '       ') + field.name + ': ' + field.types.map( o => o.type).join(' | '));
         //console.log(path + '/' + field.name + ': ' + field.type + (registered ? ' => ' + registered : ''));
 
-        if ( is_root && avro.name )
+        if ( can_be_root && avro.name )
         {
-            registered  = nspace + '/' + avro.name;
-
             root_elements.push({
                 namespace:  nspace!,
                 name:       avro.name,

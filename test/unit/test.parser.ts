@@ -211,9 +211,9 @@ describe('Parser', ( ) =>
                 "name":         "TestType",
                 "fields":       [
                     {
-                        "name":     "PropTestArray",
+                        "name":     "PropTestArray1",
                         "type":     {
-                            "name":     "TestArray",
+                            "name":     "TestArray1",
                             "type":     "array",
                             "items":    {
                                 "name":         "TestSubArray",
@@ -231,6 +231,21 @@ describe('Parser', ( ) =>
                                 }
                             }
                         }
+                    },
+                    {
+                        "name":     "PropTestArray2",
+                        "type":     {
+                            "name":     "TestArray2",
+                            "type":     "array",
+                            "items":    "string"
+                        }
+                    },
+                    {
+                        "name":     "PropTestArray3",
+                        "type":     {
+                            "type":     "array",
+                            "items":    "string"
+                        }
                     }
                 ]
             };
@@ -240,15 +255,21 @@ describe('Parser', ( ) =>
 
             //console.log(elements.map( o => `${o.namespace}.${o.name} <${o.type}>`));
 
-            expect(elements.length).to.equal(4);
+            expect(elements.length).to.equal(5);
 
             let element: any    = null;
 
             element     = elements.find( o => o.name == 'TestType');
             expect(element.namespace).to.equal('nspace');
             expect(element.types).to.deep.equal([{type: ElementType.RECORD}]);
+            expect(element.children[0].name).to.equal('PropTestArray1');
+            expect(element.children[0].types).to.deep.equal([{type: 'TestArray1'}]);
+            expect(element.children[1].name).to.equal('PropTestArray2');
+            expect(element.children[1].types).to.deep.equal([{type: 'TestArray2'}]);
+            expect(element.children[2].name).to.equal('PropTestArray3');
+            expect(element.children[2].types).to.deep.equal([{type: ElementType.ARRAY, subtypes: [{type: ElementType.STRING}]}]);
 
-            element     = elements.find( o => o.name == 'TestArray');
+            element     = elements.find( o => o.name == 'TestArray1');
             expect(element.namespace).to.equal('nspace');
             expect(element.types).to.deep.equal([{type: ElementType.ARRAY, subtypes: [{type: 'TestSubArray'}]}]);
 
@@ -259,6 +280,10 @@ describe('Parser', ( ) =>
             element     = elements.find( o => o.name == 'TestSubType');
             expect(element.namespace).to.equal('nspace.subspace');
             expect(element.types).to.deep.equal([{type: ElementType.RECORD}]);
+
+            element     = elements.find( o => o.name == 'TestArray2');
+            expect(element.namespace).to.equal('nspace');
+            expect(element.types).to.deep.equal([{type: ElementType.ARRAY, subtypes: [{type: ElementType.STRING}]}]);
         });
 
         it('Nested unions');

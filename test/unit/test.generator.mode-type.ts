@@ -144,6 +144,40 @@ describe('Generator', ( ) =>
             });
 
 
+            it('Basic type: array of union string / number', ( ) =>
+            {
+                let elements: Array<RootElement>    = [
+                    {
+                        schema:     {hello_world_schema: 'hello'},
+                        name:       'TestStringNumberArray',
+                        namespace:  'test.namespace',
+                        types:       [
+                            {
+                                type:       ElementType.ARRAY,
+                                subtypes:   [
+                                    {
+                                        type:   ElementType.STRING
+                                    },
+                                    {
+                                        type:   ElementType.NUMBER
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ];
+
+                let output  = generator.generate(elements);
+
+                expect(output.length).to.equal(1);
+                expect(multiTrim(output[0].content)).to.equal(multiTrim(
+                    'export namespace test.namespace {\
+                        export type TestStringNumberArray = Array<string | number>;\
+                    }'
+                ));
+            });
+
+
             it('Complex type with simple subtypes', ( ) =>
             {
                 let elements: Array<RootElement>    = [
